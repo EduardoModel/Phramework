@@ -11,4 +11,6 @@
     return 'Hello world';
   });
 
+  $app->router->get('/contact', 'contact');
+
   $app->run();

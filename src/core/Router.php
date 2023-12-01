@@ -20,18 +20,18 @@
     }
 
     /** Registers a get path with its callback */
-    public function get(string $path, callable $callback): void
+    public function get(string $path, callable|string $callback): void
     {
       $this->routes[self::GET][$path] = $callback;
     }
 
     /** Registers a post path with its callback */
-    public function post(string $path, callable $callback): void
+    public function post(string $path, callable|string $callback): void
     {
       $this->routes[self::POST][$path] = $callback;
     }
 
-    public function resolve(): void
+    public function resolve(): string
     {
       $path = $this->request->getPath();
       $method = $this->request->getMethod();
@@ -39,10 +39,18 @@
       $callback = $this->routes[$method][$path] ?? false;
       
       if(!$callback) {
-        echo "Not found";
-        exit;
+        return "Not found";
       }
 
-      echo call_user_func($callback);
+      if(is_string($callback)) {
+        return $this->renderView($callback);
+      }
+
+      return call_user_func($callback);
+    }
+
+    private function renderView(string $view): string
+    {
+      return $view;
     }
   }
