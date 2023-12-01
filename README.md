@@ -9,3 +9,4 @@ intricacies of the modern frameworks used the market nowadays.
 - How the routes are configured
 - How the main components of a MVC application interact with each other
 - How middlewares are applied to routes
+- Make this framework installable via composer
