@@ -51,6 +51,7 @@
 
     private function renderView(string $view): string
     {
-      return $view;
+      include_once __DIR__."/views/{$view}.php";
+      return "";
     }
   }
