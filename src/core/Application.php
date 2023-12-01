@@ -8,14 +8,17 @@
    */
   class Application
   {
-    public function __construct(
-      public Router $router = new Router()
-    )
+    public Request $request;
+    public Router $router;
+
+    public function __construct()
     {
+      $this->request = new Request();
+      $this->router = new Router($this->request);
     }
 
     public function run(): void
     {
-      // TODO implement this method
+      $this->router->resolve();
     }
   }

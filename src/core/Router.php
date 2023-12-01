@@ -6,11 +6,18 @@
   /**
    * Responsible for handling the incoming requests
    */
-  class Router {
+  class Router
+  {
     private const POST = 'post';
     private const GET = 'get';
-    /** string[] */
+    
     protected array $routes = [];
+
+    public function __construct(
+      private Request $request,
+    )
+    {
+    }
 
     /** Registers a get path with its callback */
     public function get(string $path, callable $callback): void
@@ -22,5 +29,10 @@
     public function post(string $path, callable $callback): void
     {
       $this->routes[self::POST][$path] = $callback;
+    }
+
+    public function resolve(): void
+    {
+      echo $this->request->getPath();
     }
   }
