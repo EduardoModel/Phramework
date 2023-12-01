@@ -1,0 +1,16 @@
+{
+  "name": "eduardomodel/phramework",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Phramework\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Eduardo Franklin Model",
+      "email": "edu_model@hotmail.com"
+    }
+  ],
+  "require": {}
+}
