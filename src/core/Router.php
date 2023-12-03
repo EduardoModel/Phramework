@@ -8,9 +8,6 @@
    */
   class Router
   {
-    private const POST = 'post';
-    private const GET = 'get';
-
     private const LAYOUT_CONTENT = "{{content}}";
     
     protected array $routes = [];
@@ -25,13 +22,13 @@
     /** Registers a get path with its callback */
     public function get(string $path, callable|string $callback): void
     {
-      $this->routes[self::GET][$path] = $callback;
+      $this->routes[Request::GET][$path] = $callback;
     }
 
     /** Registers a post path with its callback */
     public function post(string $path, callable|string $callback): void
     {
-      $this->routes[self::POST][$path] = $callback;
+      $this->routes[Request::POST][$path] = $callback;
     }
 
     public function resolve(): string

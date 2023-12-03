@@ -5,6 +5,10 @@
 
   class Request
   {
+
+    public const GET = "get";
+    public const POST = "post";
+
     public function getPath(): string
     {
       $requestPath = $_SERVER['REQUEST_URI'] ?? "/";
