@@ -40,7 +40,7 @@
       
       if(!$callback) {
         $this->response->setStatusCode(Response::NOT_FOUND);
-        return "Not found";
+        return $this->renderView("not-found");
       }
 
       if(is_string($callback)) {
