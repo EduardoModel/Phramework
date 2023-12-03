@@ -10,6 +10,8 @@
   {
     private const POST = 'post';
     private const GET = 'get';
+
+    private const LAYOUT_CONTENT = "{{content}}";
     
     protected array $routes = [];
 
@@ -51,7 +53,24 @@
 
     private function renderView(string $view): string
     {
-      include_once __DIR__."/views/{$view}.php";
-      return "";
+      $layoutContent = $this->getLayoutContent();
+      $viewContent = $this->renderViewOnly($view);
+      return str_replace(self::LAYOUT_CONTENT, $viewContent, $layoutContent);
+    }
+
+    protected function getLayoutContent(): string
+    {
+      // Starts output caching
+      ob_start();
+      include_once Application::$rootPath."/views/layouts/main.php";
+      // Returns the contents inside the caching and clear it
+      return ob_get_clean();
+    }
+
+    protected function renderViewOnly(string $view): string
+    {
+      ob_start();
+      include_once Application::$rootPath."/views/{$view}.php";
+      return ob_get_clean();
     }
   }

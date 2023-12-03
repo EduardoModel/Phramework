@@ -5,7 +5,7 @@
 
   use Phramework\core\Application;
   
-  $app = new Application(dirname(__DIR__));
+  $app = new Application(dirname(__DIR__)."/src/core");
 
   $app->router->get('/', 'home');
 
