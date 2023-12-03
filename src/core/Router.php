@@ -17,6 +17,7 @@
 
     public function __construct(
       private Request $request,
+      private Response $response,
     )
     {
     }
@@ -41,6 +42,7 @@
       $callback = $this->routes[$method][$path] ?? false;
       
       if(!$callback) {
+        $this->response->setStatusCode(Response::NOT_FOUND);
         return "Not found";
       }
 
