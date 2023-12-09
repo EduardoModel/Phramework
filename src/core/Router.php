@@ -20,7 +20,7 @@
     }
 
     /** Registers a get path with its callback */
-    public function get(string $path, callable|string $callback): void
+    public function get(string $path, callable|string|array $callback): void
     {
       $this->routes[Request::GET][$path] = $callback;
     }
@@ -47,23 +47,39 @@
         return $this->renderView($callback);
       }
 
-      /*
-        For this function call is also possible to pass down an array containing
-        the class with the respective method that needs to be called
-        For now the way that it works is using static methods, otherwise php throws an error
-        Ex.: [UserController::class, 'create']
-      */
+      if(is_array($callback)) {
+        // TODO: here we'll need some DI/DIC shenanigans while instantiating the controller
+        $callback[0] = new $callback[0];
+      }
+
+      /**
+       * For this function call is also possible to pass down an array containing
+       * the class with the respective method that needs to be called
+       * For now the way that it works is using static methods, otherwise php throws an error
+       * Ex.: [UserController::class, 'create']
+       */
        return call_user_func($callback);
     }
 
-    public function renderView(string $view): string
+    public function renderView(string $view, array $params): string
     {
       $layoutContent = $this->getLayoutContent();
-      $viewContent = $this->renderViewOnly($view);
+      $viewContent = $this->renderViewOnly($view, $params);
       return str_replace(self::LAYOUT_CONTENT, $viewContent, $layoutContent);
     }
-    public function renderViewOnly(string $view): string
+    public function renderViewOnly(string $view, array $params): string
     {
+      // #Magic-step!
+      /**
+       * Here will be defined all the variables passed down via params
+       * so the view have them available while rendering
+       */
+      foreach($params as $key => $value) {
+        // Using the double dollar sign symbol is possible to create a variable with
+        // the value contained inside the $key 
+        $$key = $value;
+      }
+
       ob_start();
       include_once Application::$rootPath."/views/{$view}.php";
       return ob_get_clean();
