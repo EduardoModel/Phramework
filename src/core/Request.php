@@ -25,6 +25,25 @@
       return strtolower($_SERVER['REQUEST_METHOD']);
     }
 
-    public function getBody(): string
-    {}
+    // This method will be mainly responsible for sanitizing the received data
+    public function getBody(): array
+    {
+      $body = [];
+      
+      if($this->getMethod() === self::GET) {
+        foreach($_GET as $key => $value) {
+          // The function filter_input allow to filter out invalid/malicious/undesired characters from the payload
+          $body[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+        }
+      }
+
+      if($this->getMethod() === self::POST) {
+        foreach($_POST as $key => $value) {
+          // The function filter_input allow to filter out invalid/malicious/undesired characters from the payload
+          $body[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+        }
+      }
+
+      return $body;
+    }
   }

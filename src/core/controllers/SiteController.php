@@ -3,7 +3,7 @@
 
   namespace Phramework\core\controllers;
 
-  use Phramework\core\Application;
+  use Phramework\core\Request;
   use Phramework\core\Controller;
   
   class SiteController extends Controller
@@ -14,8 +14,10 @@
       return $this->render('contact');
     }
 
-    public function create(): string
+    public function create(Request $request): string
     {
+      $body = $request->getBody();
+      
       echo "Handling submitted data";
       return "";  
     }

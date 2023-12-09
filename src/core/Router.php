@@ -57,8 +57,10 @@
        * the class with the respective method that needs to be called
        * For now the way that it works is using static methods, otherwise php throws an error
        * Ex.: [UserController::class, 'create']
+       * 
+       * It is also possible to inform the arguments for a given method in order for it to work as a second argument
        */
-       return call_user_func($callback);
+       return call_user_func($callback, $this->request);
     }
 
     public function renderView(string $view, array $params = []): string
