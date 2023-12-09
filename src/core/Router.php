@@ -26,7 +26,7 @@
     }
 
     /** Registers a post path with its callback */
-    public function post(string $path, callable|string $callback): void
+    public function post(string $path, callable|string|array $callback): void
     {
       $this->routes[Request::POST][$path] = $callback;
     }
@@ -47,14 +47,26 @@
         return $this->renderView($callback);
       }
 
-      return call_user_func($callback);
+      /*
+        For this function call is also possible to pass down an array containing
+        the class with the respective method that needs to be called
+        For now the way that it works is using static methods, otherwise php throws an error
+        Ex.: [UserController::class, 'create']
+      */
+       return call_user_func($callback);
     }
 
-    private function renderView(string $view): string
+    public function renderView(string $view): string
     {
       $layoutContent = $this->getLayoutContent();
       $viewContent = $this->renderViewOnly($view);
       return str_replace(self::LAYOUT_CONTENT, $viewContent, $layoutContent);
+    }
+    public function renderViewOnly(string $view): string
+    {
+      ob_start();
+      include_once Application::$rootPath."/views/{$view}.php";
+      return ob_get_clean();
     }
 
     protected function getLayoutContent(): string
@@ -63,13 +75,6 @@
       ob_start();
       include_once Application::$rootPath."/views/layouts/main.php";
       // Returns the contents inside the caching and clear it
-      return ob_get_clean();
-    }
-
-    protected function renderViewOnly(string $view): string
-    {
-      ob_start();
-      include_once Application::$rootPath."/views/{$view}.php";
       return ob_get_clean();
     }
   }
