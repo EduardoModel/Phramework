@@ -61,7 +61,7 @@
        return call_user_func($callback);
     }
 
-    public function renderView(string $view, array $params): string
+    public function renderView(string $view, array $params = []): string
     {
       $layoutContent = $this->getLayoutContent();
       $viewContent = $this->renderViewOnly($view, $params);
