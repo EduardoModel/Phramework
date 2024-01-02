@@ -20,9 +20,19 @@
       return substr($requestPath, 0, $questionMarkPosition);
     }
 
-    public function getMethod(): string
+    public function method(): string
     {
       return strtolower($_SERVER['REQUEST_METHOD']);
+    }
+
+    public function isGet(): bool
+    {
+      return $this->method() === self::GET;
+    }
+
+    public function isPost(): bool
+    {
+      return $this->method() === self::POST;
     }
 
     // This method will be mainly responsible for sanitizing the received data
@@ -30,14 +40,14 @@
     {
       $body = [];
       
-      if($this->getMethod() === self::GET) {
+      if($this->method() === self::GET) {
         foreach($_GET as $key => $value) {
           // The function filter_input allow to filter out invalid/malicious/undesired characters from the payload
           $body[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
         }
       }
 
-      if($this->getMethod() === self::POST) {
+      if($this->method() === self::POST) {
         foreach($_POST as $key => $value) {
           // The function filter_input allow to filter out invalid/malicious/undesired characters from the payload
           $body[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
