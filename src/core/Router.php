@@ -49,7 +49,8 @@
 
       if(is_array($callback)) {
         // TODO: here we'll need some DI/DIC shenanigans while instantiating the controller
-        $callback[0] = new $callback[0];
+        Application::$app->controller = new $callback[0];
+        $callback[0] = Application::$app->controller;
       }
 
       /**
@@ -60,7 +61,7 @@
        * 
        * It is also possible to inform the arguments for a given method in order for it to work as a second argument
        */
-       return call_user_func($callback, $this->request);
+       return call_user_func($callback, $this->request, $this->response);
     }
 
     public function renderView(string $view, array $params = []): string
@@ -89,9 +90,10 @@
 
     protected function getLayoutContent(): string
     {
+      $layout = Application::$app->controller->getLayout();
       // Starts output caching
       ob_start();
-      include_once Application::$rootPath."/views/layouts/main.php";
+      include_once Application::$rootPath."/views/layouts/{$layout}.php";
       // Returns the contents inside the caching and clear it
       return ob_get_clean();
     }

@@ -16,6 +16,7 @@
     public Router $router;
 
     public static Application $app;
+    public Controller $controller;
 
     public function __construct(
       string $rootPath

@@ -5,11 +5,21 @@
 
   use Phramework\core\Controller;
   use Phramework\core\Request;
+  use Phramework\core\Response;
 
   class AuthController extends Controller
   {
-    public function login() 
+
+    public function __construct() {
+      $this->setLayout("auth");
+    }
+
+    public function login(Request $request, Response $response) 
     {
+      if($request->isPost()) {
+        echo "post received!";
+        $response->setStatusCode(Response::NOT_FOUND);
+      }
       return $this->render("login");
     }
 
