@@ -1,4 +1,4 @@
-<h1>Contact</h1>
+<h1>Login</h1>
 
 <form action="" method="post" class="form">
     <div class="form-group mb-3">
