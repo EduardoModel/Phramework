@@ -1,7 +1,7 @@
 <?php
   declare(strict_types=1);
 
-  namespace Phramework\core\controllers;
+  namespace Phramework\controllers;
 
   use Phramework\core\Request;
   use Phramework\core\Controller;

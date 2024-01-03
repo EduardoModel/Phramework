@@ -1,9 +1,10 @@
 <?php
   declare(strict_types=1);
 
-  namespace Phramework\core\controllers;
+  namespace Phramework\controllers;
 
   use Phramework\core\Controller;
+  use Phramework\models\RegisterModel;
   use Phramework\core\Request;
   use Phramework\core\Response;
 
@@ -29,10 +30,18 @@
        * I wouldn't overload the method here, since is always better to keep the logic
        * separated for the GET and POST methods
        */ 
+      $registerModel = new RegisterModel();
       if($request->isPost()) {
-        return 'Handle submitted data';
+        $registerModel->loadData($request);
+
+        if($registerModel->validate()) {
+          $registerModel->save();
+          return "Yaayy";
+        }
       }
-      return $this->render('register');
+      return $this->render('register', [
+        'model' => $registerModel
+      ]);
     }
     
   }

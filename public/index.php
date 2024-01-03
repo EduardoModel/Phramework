@@ -4,10 +4,10 @@
   require_once __DIR__."/../vendor/autoload.php";
 
   use Phramework\core\Application;
-  use Phramework\core\controllers\AuthController;
-  use Phramework\core\controllers\SiteController;
+  use Phramework\controllers\AuthController;
+  use Phramework\controllers\SiteController;
 
-  $app = new Application(dirname(__DIR__)."/src/core");
+  $app = new Application(dirname(__DIR__)."/src");
 
   $app->router->get('/', [SiteController::class, 'home']);
 
