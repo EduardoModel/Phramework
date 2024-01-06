@@ -32,7 +32,14 @@
        */ 
       $registerModel = new RegisterModel();
       if($request->isPost()) {
-        $registerModel->loadData($request);
+        $registerModel->loadData($request->getBody());
+
+        $registerModel->validate();
+
+        echo "<pre>";
+        print_r($registerModel->getErrors());
+        echo "</pre>";
+        exit(0);
 
         if($registerModel->validate()) {
           $registerModel->save();

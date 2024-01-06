@@ -14,8 +14,8 @@
         <input type="password" name="password" id="password" class="form-control">
     </div>
     <div class="form-group mb-3">
-        <label class="form-label" for="confirm-password">Confirm password</label>
-        <input type="password" name="confirm-password" id="confirm-password" class="form-control">
+        <label class="form-label" for="passwordConfirmation">Confirm password</label>
+        <input type="password" name="passwordConfirmation" id="passwordConfirmation" class="form-control">
     </div>
     <button class="btn btn-primary" type="submit">Submit</button>
 </form>
