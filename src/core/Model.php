@@ -16,11 +16,15 @@ abstract class Model
 
   private array $errors = [];
   
-  private function addError(string $attribute, string $rule): void
+  private function addError(string $attribute, string $rule, array $params = []): void
   {
     $errorMessage = $this->getErrorMessage($rule);
+
+    foreach ($params as $key => $value) {
+      $errorMessage = str_replace("{{$key}}", (string) $value, $errorMessage);
+    }
     
-    $this->errors[$attribute][] = $this->getErrorMessage($rule);
+    $this->errors[$attribute][] = $errorMessage;
   }
 
   // In the future it can be changed with enum class for better type hinting!
@@ -72,14 +76,23 @@ abstract class Model
           $this->addError($attribute, self::RULE_EMAIL);
         }
         if($ruleName === self::RULE_MAX_LENGTH && strlen($value) > $rule['max']) {
-          $this->addError($attribute, self::RULE_MAX_LENGTH);
+          $this->addError($attribute, self::RULE_MAX_LENGTH, $rule);
         }
         if($ruleName === self::RULE_MIN_LENGTH && strlen($value) < $rule['min']) {
-          $this->addError($attribute, self::RULE_MIN_LENGTH);
+          $this->addError($attribute, self::RULE_MIN_LENGTH, $rule);
+        }
+        // This checks against the value saved within the entity
+        if($ruleName === self::RULE_MATCH && $value !== $this->{$rule['match']}) {
+          $this->addError($attribute, self::RULE_MATCH, $rule);
         }
       }
     }
 
     return !count($this->getErrors());
+  }
+
+  public function hasErrors(string $attribute)
+  {
+    return !empty($this->getErrors()[$attribute]);
   }
 }
