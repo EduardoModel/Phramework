@@ -6,10 +6,10 @@
    * and styling side of things
    */
   $form = Phramework\core\form\Form::begin('', Phramework\core\Http\Method::POST);
-   echo $form->field($model, 'name');
-   echo $form->field($model, 'email');
-   echo $form->field($model, 'password');
-   echo $form->field($model, 'passwordConfirmation');
+   echo $form->field($model, 'name', Phramework\core\form\enums\FieldType::TEXT);
+   echo $form->field($model, 'email', Phramework\core\form\enums\FieldType::EMAIL);
+   echo $form->field($model, 'password', Phramework\core\form\enums\FieldType::PASSWORD);
+   echo $form->field($model, 'passwordConfirmation', Phramework\core\form\enums\FieldType::PASSWORD);
 ?>
 <button class="btn btn-primary" type="submit">Submit</button>
 <?php echo Phramework\core\form\Form::end(); ?>

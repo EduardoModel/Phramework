@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Phramework\core\form;
 
+use Phramework\core\form\enums\FieldType;
 use Phramework\core\Http\Method;
 use Phramework\core\Model;
 
@@ -20,8 +21,8 @@ class Form
     return '</form>';
   }
 
-  public function field(Model $model, string $attribute): Field
+  public function field(Model $model, string $attribute, FieldType $type): Field
   {
-    return new Field($model, $attribute);   
+    return new Field($model, $attribute, $type);   
   }
 }
