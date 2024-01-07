@@ -12,6 +12,7 @@
 
     public Request $request;
     public Response $response;
+    public Database $database;
 
     public Router $router;
 
@@ -30,6 +31,8 @@
       $this->request = new Request();
       $this->response = new Response();
       $this->router = new Router($this->request, $this->response);
+
+      $this->database = new Database();
     }
 
     public function run(): void
