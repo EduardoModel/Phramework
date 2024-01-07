@@ -8,10 +8,10 @@
 
   class RegisterModel extends Model
   {
-    public string $name;
-    public string $email;
-    public string $password;
-    public string $passwordConfirmation;
+    public string $name = '';
+    public string $email = '';
+    public string $password = '';
+    public string $passwordConfirmation = '';
 
     public function rules(): array
     {

@@ -45,6 +45,11 @@ abstract class Model
     return $this->errors;
   }
 
+  public function getFirstError(string $attribute): ?string
+  {
+    return $this->errors[$attribute][0] ?? null;
+  }
+
   public function loadData(array $data): void
   {
     foreach ($data as $key => $value) {

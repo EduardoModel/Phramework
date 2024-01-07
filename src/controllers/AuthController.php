@@ -36,11 +36,6 @@
 
         $registerModel->validate();
 
-        echo "<pre>";
-        print_r($registerModel->getErrors());
-        echo "</pre>";
-        exit(0);
-
         if($registerModel->validate()) {
           $registerModel->save();
           return "Yaayy";

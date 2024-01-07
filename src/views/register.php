@@ -1,21 +1,15 @@
 <h1>Register</h1>
-
-<form action="" method="post" class="form">
-    <div class="form-group mb-3">
-        <label class="form-label" for="name">Name</label>
-        <input type="text" name="name" id="name" class="form-control">
-    </div>
-    <div class="form-group mb-3">
-        <label class="form-label" for="email">Email</label>
-        <input type="email" name="email" id="email" class="form-control">
-    </div>
-    <div class="form-group mb-3">
-        <label class="form-label" for="password">Password</label>
-        <input type="password" name="password" id="password" class="form-control">
-    </div>
-    <div class="form-group mb-3">
-        <label class="form-label" for="passwordConfirmation">Confirm password</label>
-        <input type="password" name="passwordConfirmation" id="passwordConfirmation" class="form-control">
-    </div>
-    <button class="btn btn-primary" type="submit">Submit</button>
-</form>
+<?php
+  /**
+   * This approach solves the issue with the overwhelming usage of 
+   * php tags within the php. However: it is a very restrictive solution from the html
+   * and styling side of things
+   */
+  $form = Phramework\core\form\Form::begin('', Phramework\core\Http\Method::POST);
+   echo $form->field($model, 'name');
+   echo $form->field($model, 'email');
+   echo $form->field($model, 'password');
+   echo $form->field($model, 'passwordConfirmation');
+?>
+<button class="btn btn-primary" type="submit">Submit</button>
+<?php echo Phramework\core\form\Form::end(); ?>
