@@ -5,7 +5,7 @@
    * php tags within the php. However: it is a very restrictive solution from the html
    * and styling side of things
    */
-  $form = Phramework\core\form\Form::begin('', Phramework\core\Http\Method::POST);
+  $form = Phramework\core\form\Form::begin('', Phramework\core\http\Method::POST);
    echo $form->field($model, 'name', Phramework\core\form\enums\FieldType::TEXT);
    echo $form->field($model, 'email', Phramework\core\form\enums\FieldType::EMAIL);
    echo $form->field($model, 'password', Phramework\core\form\enums\FieldType::PASSWORD);

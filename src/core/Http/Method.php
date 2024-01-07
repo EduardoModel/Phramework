@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Phramework\core\Http;
+namespace Phramework\core\http;
 
 enum Method: string
 {
