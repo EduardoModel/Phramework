@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Phramework\core\database;
 
 use PDO;
+use Phramework\core\Application;
+use Phramework\core\Migration;
 
 class Database
 {
@@ -16,5 +18,87 @@ class Database
     $this->db = new PDO($dsn, $user, $password, $options);
     // If something went wrong just throw an exception
     $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  }
+
+  public function applyMigrations(): void
+  {
+    // Create migrations table, if not defined
+    $this->createMigrationsTable();
+
+    // Get all migration files that were already migrated
+    $appliedMigrations = $this->getAppliedMigrations(); 
+
+    // Scan dir for the migration files
+    $migrationFiles = scandir(Application::$rootPath."/migrations");
+
+    $migrationsToApply = array_diff($migrationFiles, $appliedMigrations);
+
+    $newMigrations = [];
+    foreach($migrationsToApply as $migration) {
+      if($migration === "." || $migration === "..") {
+        continue;
+      }
+      
+      require_once Application::$rootPath."/migrations/".$migration;
+
+      $className = pathinfo($migration, PATHINFO_FILENAME);
+      
+      // Fully qualified name is required!
+      /** @var Migration */
+      $instance = new ("Phramework\migrations\\".$className)();
+      
+      $this->log("Applying migration {$migration}");
+      $instance->up();
+      $this->log("Applied migration {$migration}");
+      $newMigrations[] = $migration;
+    }
+
+    if(!empty($newMigrations)) {
+      $this->saveMigrations($newMigrations);
+    } else {
+      $this->log("All migrations were applied");
+    }
+  }
+
+  private function createMigrationsTable(): void
+  {
+    $this->db->exec("
+      CREATE TABLE IF NOT EXISTS migrations (
+        id SERIAL PRIMARY KEY,
+        migration VARCHAR(255),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      ) ENGINE=INNODB;
+    ");
+  }
+
+  private function getAppliedMigrations(): array
+  {
+    $sth = $this->db->prepare("
+      SELECT
+        migration
+      FROM
+        migrations
+    ");
+
+    $sth->execute();
+  
+    return $sth->fetchAll(PDO::FETCH_COLUMN);
+  }
+
+  private function saveMigrations(array $migrations): void
+  {
+    $migrationsToSave = implode(array_map(fn($m) => "('$m')", $migrations));
+
+    $sth = $this->db->prepare("
+      INSERT INTO migrations (migration) VALUES
+      {$migrationsToSave}
+    ");
+
+    $sth->execute();
+  }
+
+  private function log(string $message): void
+  {
+    echo "[". date("Y-m-d H:i:s") . "] - " . $message . PHP_EOL;
   }
 }
