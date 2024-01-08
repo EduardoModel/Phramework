@@ -3,6 +3,9 @@
 
   namespace Phramework\core;
 
+use Phramework\core\database\Database;
+use Phramework\core\database\DatabaseConfig;
+
   /**
    * Main entry point of the application
    */
@@ -20,7 +23,8 @@
     public Controller $controller;
 
     public function __construct(
-      string $rootPath
+      string $rootPath,
+      DatabaseConfig $databaseConfig
     )
     {
       // Root path is to make imports more easy and concise across the application
@@ -32,7 +36,11 @@
       $this->response = new Response();
       $this->router = new Router($this->request, $this->response);
 
-      $this->database = new Database();
+      $this->database = new Database(
+        $databaseConfig->getDsn(),
+        $databaseConfig->getUser(),
+        $databaseConfig->getPassword()
+      );
     }
 
     public function run(): void

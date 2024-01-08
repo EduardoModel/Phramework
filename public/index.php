@@ -3,11 +3,23 @@
 
   require_once __DIR__."/../vendor/autoload.php";
 
+  use Dotenv\Dotenv;
   use Phramework\core\Application;
   use Phramework\controllers\AuthController;
   use Phramework\controllers\SiteController;
+  use Phramework\core\database\DatabaseConfig;
 
-  $app = new Application(dirname(__DIR__)."/src");
+  // Function dirname takes the directory of the passed down directory
+  $dotenv = Dotenv::createImmutable(dirname(__DIR__));
+  $dotenv->load();
+
+  $databaseConfig = new DatabaseConfig(
+    $_ENV["DB_DSN"] ?? '',
+    $_ENV['DB_USER'] ??'',
+    $_ENV['DB_PASSWORD'] ??''
+  );
+
+  $app = new Application(dirname(__DIR__)."/src", $databaseConfig);
 
   $app->router->get('/', [SiteController::class, 'home']);
 
