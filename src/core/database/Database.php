@@ -60,6 +60,34 @@ class Database
     }
   }
 
+  public function dropMigrations(): void
+  {
+    // Need to iterate from the latest to the oldest
+    $appliedMigrations = array_reverse($this->getAppliedMigrations()); 
+
+    foreach($appliedMigrations as $migration) {
+      if($migration === "." || $migration === "..") {
+        continue;
+      }
+      
+      require_once Application::$rootPath."/migrations/".$migration;
+
+      $className = pathinfo($migration, PATHINFO_FILENAME);
+      
+      // Fully qualified name is required!
+      /** @var Migration */
+      $instance = new ("Phramework\migrations\\".$className)();
+      
+      $this->log("Reverting migration {$migration}");
+      $instance->down();
+      $this->log("Reverting migration {$migration}");
+    }
+
+    $this->log("Dropping migrations table");
+    $this->dropMigrationsTable();
+    $this->log("Dropped migrations table");
+  }
+
   private function createMigrationsTable(): void
   {
     $this->db->exec("
@@ -85,9 +113,18 @@ class Database
     return $sth->fetchAll(PDO::FETCH_COLUMN);
   }
 
+  private function dropMigrationsTable(): void
+  {
+    $sth = $this->db->prepare("
+      DROP TABLE migrations;
+    ");
+
+    $sth->execute();
+  }
+
   private function saveMigrations(array $migrations): void
   {
-    $migrationsToSave = implode(array_map(fn($m) => "('$m')", $migrations));
+    $migrationsToSave = implode(',', array_map(fn($m) => "('$m')", $migrations));
 
     $sth = $this->db->prepare("
       INSERT INTO migrations (migration) VALUES

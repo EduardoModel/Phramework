@@ -3,6 +3,21 @@
 
   require_once __DIR__."/vendor/autoload.php";
 
+  define("MIGRATION_UP", "up");
+  define("MIGRATION_DOWN", "down");
+
+  if(!isset($argv[1]) || $argv[1] === "") {
+    echo "[ERROR] - Missing up or down param" . PHP_EOL;
+    exit(1);
+  }
+  
+  $migrationCommand = strtolower($argv[1]);
+
+  if($migrationCommand != MIGRATION_UP && $migrationCommand != MIGRATION_DOWN) {
+    echo "[ERROR] - Invalid param; Expected either " . MIGRATION_UP . " or " . MIGRATION_DOWN . ", {$migrationCommand} received". PHP_EOL;
+    exit(1);
+  }
+
   use Dotenv\Dotenv;
   use Phramework\core\Application;
   use Phramework\core\database\DatabaseConfig;
@@ -19,4 +34,9 @@
 
   $app = new Application(__DIR__."/src", $databaseConfig);
 
-  $app->database->applyMigrations();
+  if($migrationCommand === MIGRATION_UP) {
+    $app->database->applyMigrations();
+  }
+  else {
+    $app->database->dropMigrations();
+  }
