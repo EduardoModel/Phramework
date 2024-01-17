@@ -6,7 +6,7 @@
   use Phramework\core\Model;
 
 
-  class RegisterModel extends Model
+  class User extends Model
   {
     public string $name = '';
     public string $email = '';
@@ -30,7 +30,7 @@
       ];
     }
 
-    public function save(): RegisterModel
+    public function save(): User
     {
       return new self();
     }

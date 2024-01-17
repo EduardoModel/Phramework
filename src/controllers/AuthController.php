@@ -4,7 +4,7 @@
   namespace Phramework\controllers;
 
   use Phramework\core\Controller;
-  use Phramework\models\RegisterModel;
+  use Phramework\models\User;
   use Phramework\core\Request;
   use Phramework\core\Response;
 
@@ -30,19 +30,19 @@
        * I wouldn't overload the method here, since is always better to keep the logic
        * separated for the GET and POST methods
        */ 
-      $registerModel = new RegisterModel();
+      $user = new User();
       if($request->isPost()) {
-        $registerModel->loadData($request->getBody());
+        $user->loadData($request->getBody());
 
-        $registerModel->validate();
+        $user->validate();
 
-        if($registerModel->validate()) {
-          $registerModel->save();
+        if($user->validate()) {
+          $user->save();
           return "Yaayy";
         }
       }
       return $this->render('register', [
-        'model' => $registerModel
+        'model' => $user
       ]);
     }
     
