@@ -7,19 +7,14 @@ namespace Phramework\migrations;
 use Phramework\core\Application;
 use Phramework\core\Migration;
 
-class m0001_initial implements Migration
+class m0002_add_field_password_to_users_table implements Migration
 {
   public function up(): void
   {
     $database = Application::$app->database;
     $database->db->exec("
-      CREATE TABLE users (
-        id SERIAL PRIMARY KEY,
-        email VARCHAR(255) NOT NULL,
-        name VARCHAR(255) NOT NULL,
-        status TINYINT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      ) ENGINE=INNODB;
+      ALTER TABLE users
+      ADD COLUMN password varchar(512) NOT NULL;
     ");
   }
 
@@ -27,7 +22,8 @@ class m0001_initial implements Migration
   {
     $database = Application::$app->database;
     $database->db->exec("
-      DROP TABLE users;
+      ALTER TABLE users
+      DROP COLUMN password;
     ");
   }
 }
